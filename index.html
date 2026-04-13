@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Conditionals – UK Guide Agency · 4t ESO</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#eef2f9;
+  --surface:#ffffff;
+  --s2:#f4f7fc;
+  --s3:#e8edf8;
+  --border:#d0d9ee;
+  --border2:#c0cce6;
+  --text:#111827;
+  --muted:#5a6a8a;
+  --blue:#2563eb;
+  --blue-bg:rgba(37,99,235,.07);
+  --blue-border:rgba(37,99,235,.22);
+  --gold:#b45309;
+  --gold-bg:rgba(180,83,9,.07);
+  --gold-border:rgba(180,83,9,.22);
+  --purple:#7c3aed;
+  --purple-bg:rgba(124,58,237,.07);
+  --purple-border:rgba(124,58,237,.22);
+  --green:#059669;
+  --green-bg:rgba(5,150,105,.07);
+  --green-border:rgba(5,150,105,.22);
+  --ok:#16a34a;
+  --err:#dc2626;
+  --err-bg:rgba(220,38,38,.07);
+  --err-border:rgba(220,38,38,.22);
+  --r:8px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;overflow:hidden;background:var(--bg)}
+body{color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px}
+
+/* ── SLIDE ENGINE ── */
+.deck{width:100vw;height:100vh;position:relative;overflow:hidden;display:flex;flex-direction:column}
+.slide{position:absolute;inset:0;display:flex;flex-direction:column;opacity:0;pointer-events:none;transition:opacity .35s ease,transform .35s ease;transform:translateX(36px)}
+.slide.active{opacity:1;pointer-events:all;transform:translateX(0)}
+.slide.exit-left{transform:translateX(-36px);opacity:0}
+
+/* ── TOPBAR ── */
+.topbar{
+  flex-shrink:0;
+  background:var(--surface);
+  border-bottom:2px solid var(--border);
+  padding:.45rem 1.4rem;
+  display:flex;align-items:center;justify-content:space-between;
+  box-shadow:0 1px 6px rgba(0,0,0,.06);
+  z-index:20;position:relative;
+}
+.tb-logo{font-family:'Bebas Neue',sans-serif;font-size:1.25rem;letter-spacing:.06em;
+  background:linear-gradient(135deg,var(--blue),var(--purple));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.tb-center{font-size:.72rem;font-weight:700;color:var(--muted);letter-spacing:.12em;text-transform:uppercase}
+.tb-right{display:flex;align-items:center;gap:.75rem}
+.tb-counter{font-family:'Bebas Neue',sans-serif;font-size:1.05rem;letter-spacing:.06em;color:var(--muted)}
+.tb-counter span{color:var(--blue)}
+.tb-slide-name{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);background:var(--s2);border:1px solid var(--border);border-radius:4px;padding:.15rem .5rem}
+
+/* ── CONTENT ── */
+.slide-content{
+  flex:1;
+  overflow:hidden;
+  padding:.9rem 1.6rem .6rem;
+  display:flex;flex-direction:column;
+}
+
+/* ── NAVBAR ── */
+.navbar{
+  flex-shrink:0;
+  background:var(--surface);
+  border-top:2px solid var(--border);
+  padding:.45rem 1.4rem;
+  display:flex;align-items:center;justify-content:space-between;
+  box-shadow:0 -1px 6px rgba(0,0,0,.04);
+  z-index:20;
+}
+.nav-dots{display:flex;gap:.35rem;align-items:center}
+.nav-dot{width:6px;height:6px;border-radius:50%;background:var(--border2);cursor:pointer;transition:all .2s}
+.nav-dot.active{background:var(--blue);width:18px;border-radius:3px}
+.nav-dot:hover:not(.active){background:var(--muted)}
+.btn-nav{background:var(--s2);border:1px solid var(--border2);border-radius:6px;color:var(--text);padding:.42rem 1.1rem;font-family:'DM Sans',sans-serif;font-weight:700;font-size:.78rem;cursor:pointer;transition:all .15s}
+.btn-nav:hover:not(:disabled){border-color:var(--blue);color:var(--blue);background:#fff}
+.btn-nav:disabled{opacity:.3;cursor:default}
+.btn-nav-primary{background:linear-gradient(135deg,var(--blue),#1d4ed8);color:#fff;border:none;border-radius:6px;padding:.42rem 1.25rem;font-family:'Bebas Neue',sans-serif;font-size:.95rem;letter-spacing:.07em;cursor:pointer;transition:transform .15s,box-shadow .15s}
+.btn-nav-primary:hover{transform:translateY(-1px);box-shadow:0 4px 14px rgba(37,99,235,.35)}
+
+/* ── TYPOGRAPHY ── */
+.slide-kicker{font-size:.66rem;text-transform:uppercase;letter-spacing:.18em;font-weight:700;margin-bottom:.25rem}
+.slide-kicker.blue{color:var(--blue)}
+.slide-kicker.purple{color:var(--purple)}
+.slide-kicker.green{color:var(--green)}
+.slide-kicker.gold{color:var(--gold)}
+.slide-kicker.red{color:var(--err)}
+.slide-title{font-family:'Bebas Neue',sans-serif;font-size:2.1rem;letter-spacing:.04em;line-height:1;margin-bottom:.3rem}
+.slide-title .blue{color:var(--blue)}
+.slide-title .purple{color:var(--purple)}
+.slide-title .green{color:var(--green)}
+.slide-title .gold{color:var(--gold)}
+.slide-title .red{color:var(--err)}
+.slide-sub{color:var(--muted);font-size:.82rem;line-height:1.55;margin-bottom:.55rem}
+.slide-sub b{color:var(--text)}
+
+/* ── FORMULA ── */
+.formula{
+  background:var(--s2);border-left:3px solid var(--blue);border-radius:0 6px 6px 0;
+  padding:.5rem .95rem;margin:.35rem 0;font-size:.82rem;line-height:1.65;
+}
+.formula.purple{border-left-color:var(--purple)}
+.formula.gold{border-left-color:var(--gold)}
+.formula .kw{font-weight:700;color:var(--blue)}
+.formula .kw.purple{color:var(--purple)}
+.formula .kw.gold{color:var(--gold)}
+.formula em{color:var(--text);font-style:italic}
+
+/* ── CARDS ── */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;flex:1}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.5rem;flex:1}
+.grid4{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;flex:1}
+
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:.65rem .85rem;display:flex;flex-direction:column;gap:.2rem}
+.card.blue{border-color:var(--blue-border);background:var(--blue-bg)}
+.card.purple{border-color:var(--purple-border);background:var(--purple-bg)}
+.card.green{border-color:var(--green-border);background:var(--green-bg)}
+.card.gold{border-color:var(--gold-border);background:var(--gold-bg)}
+.card.err{border-color:var(--err-border);background:var(--err-bg)}
+.card.ok-card{border-color:rgba(22,163,74,.25);background:rgba(22,163,74,.07)}
+
+.c-label{font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em}
+.c-label.blue{color:var(--blue)}
+.c-label.purple{color:var(--purple)}
+.c-label.green{color:var(--green)}
+.c-label.gold{color:var(--gold)}
+.c-label.red{color:var(--err)}
+.c-label.ok{color:var(--ok)}
+.c-head{font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:.04em;color:var(--text)}
+.c-body{font-size:.78rem;color:var(--muted);line-height:1.6}
+.c-body b{color:var(--text)}
+.c-body em{font-style:italic;color:var(--text);font-weight:500}
+
+/* ── EX BOXES ── */
+.ex{background:#fff;border-left:3px solid var(--gold);border-radius:0 5px 5px 0;padding:.35rem .75rem;font-size:.78rem;color:var(--text);line-height:1.55;margin:.18rem 0}
+.ex em{color:var(--gold);font-style:normal;font-weight:700}
+.ex-err{background:#fff;border-left:3px solid var(--err);border-radius:0 5px 5px 0;padding:.35rem .75rem;font-size:.78rem;color:var(--err);line-height:1.55;margin:.18rem 0}
+.ex-ok{background:#fff;border-left:3px solid var(--ok);border-radius:0 5px 5px 0;padding:.35rem .75rem;font-size:.78rem;color:#15803d;line-height:1.55;margin:.18rem 0}
+
+/* ── TAG ── */
+.tag{display:inline-block;padding:.1rem .45rem;border-radius:4px;font-size:.68rem;font-weight:700}
+.tag.blue{background:rgba(37,99,235,.12);color:var(--blue);border:1px solid rgba(37,99,235,.25)}
+.tag.purple{background:rgba(124,58,237,.12);color:var(--purple);border:1px solid rgba(124,58,237,.25)}
+.tag.gold{background:rgba(180,83,9,.1);color:var(--gold);border:1px solid rgba(180,83,9,.25)}
+.tag.green{background:rgba(5,150,105,.1);color:var(--green);border:1px solid rgba(5,150,105,.25)}
+
+/* ── INTRO ── */
+.intro-body{flex:1;display:flex;flex-direction:column;gap:.65rem;justify-content:center}
+.intro-badge{display:inline-flex;align-items:center;gap:.4rem;background:var(--blue-bg);border:1px solid var(--blue-border);border-radius:100px;padding:.25rem .8rem;font-size:.72rem;font-weight:700;color:var(--blue);letter-spacing:.05em;width:fit-content}
+.intro-title{font-family:'Bebas Neue',sans-serif;font-size:3.2rem;letter-spacing:.03em;line-height:.95}
+.intro-title .l1{display:block;color:var(--blue)}
+.intro-title .l2{display:block;color:var(--purple)}
+.intro-desc{color:var(--muted);font-size:.84rem;line-height:1.6;max-width:620px}
+.intro-desc b{color:var(--text)}
+.intro-chips{display:grid;grid-template-columns:repeat(3,1fr);gap:.5rem}
+.i-chip{background:var(--surface);border:1px solid var(--border2);border-radius:var(--r);padding:.55rem .85rem}
+.i-chip .ic-n{font-weight:700;font-size:.82rem;color:var(--text)}
+.i-chip .ic-d{color:var(--muted);font-size:.72rem;margin-top:.1rem}
+.intro-row{display:grid;grid-template-columns:1fr 1fr;gap:.5rem}
+.intro-block{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:.6rem .9rem;display:flex;align-items:center;gap:.65rem}
+.ib-icon{font-size:1.5rem;flex-shrink:0}
+.ib-text{font-size:.79rem;color:var(--muted);line-height:1.5}
+.ib-text b{color:var(--text)}
+
+/* ── COMPARISON TABLE ── */
+.comp-wrap{flex:1;display:flex;flex-direction:column;gap:.5rem}
+.comp-table{width:100%;border-collapse:collapse;font-size:.78rem;background:var(--surface);border-radius:var(--r);overflow:hidden;border:1px solid var(--border)}
+.comp-table th{padding:.48rem .85rem;text-align:left;font-size:.66rem;text-transform:uppercase;letter-spacing:.08em;background:var(--s3);border-bottom:2px solid var(--border)}
+.comp-table th:nth-child(2){color:var(--blue)}
+.comp-table th:nth-child(3){color:var(--purple)}
+.comp-table td{padding:.45rem .85rem;border-bottom:1px solid var(--border);vertical-align:middle;line-height:1.5}
+.comp-table tr:last-child td{border-bottom:none}
+.comp-table td:first-child{color:var(--muted);font-weight:700;font-size:.68rem;text-transform:uppercase;letter-spacing:.06em;background:var(--s2);white-space:nowrap;width:110px}
+.comp-table td.blue-td{color:var(--blue)}
+.comp-table td.purple-td{color:var(--purple)}
+.comp-pair{display:grid;grid-template-columns:1fr 1fr;gap:.5rem}
+
+/* ── ERRORS GRID ── */
+.err-grid{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;flex:1}
+.err-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:.65rem .85rem;display:flex;flex-direction:column;gap:.3rem}
+.err-num{font-family:'Bebas Neue',sans-serif;font-size:.8rem;color:var(--err);letter-spacing:.06em;background:var(--err-bg);border:1px solid var(--err-border);padding:.08rem .4rem;border-radius:4px;width:fit-content}
+.err-rule{font-size:.72rem;font-weight:700;color:var(--text);margin-bottom:.1rem}
+.err-explain{font-size:.72rem;color:var(--muted);line-height:1.5;margin-top:.15rem}
+.err-explain b{color:var(--text)}
+
+/* ── QUIZ ── */
+.quiz-wrap{flex:1;display:flex;flex-direction:column;gap:.55rem;max-width:640px}
+.quiz-top{display:flex;align-items:center;gap:1rem}
+.qprog{display:flex;gap:.25rem;flex:1}
+.qpd{flex:1;height:4px;border-radius:2px;background:var(--border);transition:background .25s}
+.qpd.done{background:var(--ok)}
+.qpd.current{background:var(--blue)}
+.qscore{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:.06em;color:var(--blue);white-space:nowrap}
+.qcard{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;animation:qIn .3s ease;flex:1;display:flex;flex-direction:column}
+@keyframes qIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.qcard-hdr{padding:.5rem .9rem;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:.55rem;background:var(--s2)}
+.qcard-num{font-family:'Bebas Neue',sans-serif;font-size:.8rem;letter-spacing:.08em;color:var(--blue)}
+.qcard-body{padding:.75rem .9rem;flex:1;display:flex;flex-direction:column;gap:.55rem}
+.qcard-q{font-size:.88rem;font-weight:600;line-height:1.5;color:var(--text)}
+.qcard-q .blank{display:inline-block;border-bottom:2px solid var(--blue);min-width:70px;text-align:center;color:var(--blue);font-weight:700;padding:0 .25rem}
+.qopts{display:grid;grid-template-columns:1fr 1fr;gap:.35rem}
+.qopt{display:flex;align-items:center;gap:.5rem;padding:.42rem .7rem;border-radius:6px;border:1px solid var(--border);cursor:pointer;transition:all .15s;font-size:.8rem;background:var(--s2);color:var(--text)}
+.qopt:hover:not(.locked){border-color:var(--blue);background:var(--blue-bg);color:var(--blue)}
+.qopt .ql{font-family:'Bebas Neue',sans-serif;font-size:.88rem;color:var(--muted);width:18px;flex-shrink:0}
+.qopt.correct{border-color:var(--ok)!important;background:rgba(22,163,74,.1)!important;color:#15803d!important}
+.qopt.correct .ql{color:var(--ok)}
+.qopt.wrong{border-color:var(--err)!important;background:rgba(220,38,38,.08)!important;color:var(--err)!important}
+.qopt.wrong .ql{color:var(--err)}
+.qopt.reveal{border-color:rgba(22,163,74,.4);background:rgba(22,163,74,.06)}
+.qopt.locked{cursor:default}
+.qfb{display:none;border-radius:6px;padding:.5rem .75rem;font-size:.76rem;line-height:1.5}
+.qfb.show{display:block}
+.qfb.good{background:rgba(22,163,74,.1);border:1px solid rgba(22,163,74,.25);color:#15803d}
+.qfb.bad{background:rgba(220,38,38,.07);border:1px solid rgba(220,38,38,.25);color:var(--err)}
+.qfb b{color:var(--text)}
+.quiz-nav-btns{display:flex;gap:.5rem}
+.btn-qnext{background:linear-gradient(135deg,var(--blue),#1d4ed8);color:#fff;border:none;border-radius:6px;padding:.4rem 1.1rem;font-family:'Bebas Neue',sans-serif;font-size:.88rem;letter-spacing:.06em;cursor:pointer;display:none;transition:transform .15s}
+.btn-qnext.show{display:block}
+.btn-qnext:hover{transform:translateY(-1px)}
+.btn-retry-q{background:var(--s2);border:1px solid var(--border2);border-radius:6px;color:var(--muted);padding:.4rem .9rem;font-family:'DM Sans',sans-serif;font-weight:700;font-size:.75rem;cursor:pointer;display:none;transition:all .15s}
+.btn-retry-q.show{display:block}
+.btn-retry-q:hover{border-color:var(--blue);color:var(--blue)}
+.quiz-result{display:none;background:linear-gradient(135deg,var(--blue-bg),var(--purple-bg));border:1px solid var(--blue-border);border-radius:var(--r);padding:1.25rem;text-align:center;animation:qIn .4s ease;flex:1;align-items:center;justify-content:center;flex-direction:column;gap:.5rem}
+.quiz-result.show{display:flex}
+.qr-icon{font-size:2.5rem}
+.qr-title{font-family:'Bebas Neue',sans-serif;font-size:2rem;color:var(--blue);letter-spacing:.04em}
+.qr-score{font-size:.88rem;color:var(--muted)}
+.qr-score b{color:var(--text);font-size:1rem}
+.btn-full-retry{background:linear-gradient(135deg,var(--blue),#1d4ed8);color:#fff;border:none;border-radius:6px;padding:.6rem 1.4rem;font-family:'Bebas Neue',sans-serif;font-size:.95rem;letter-spacing:.07em;cursor:pointer;margin-top:.35rem}
+</style>
+</head>
+<body>
+<div class="deck">
+
+<!-- ══ SLIDE 1 — INTRO ══ -->
+<div class="slide active" data-slide="1">
+  <div class="topbar">
+    <div class="tb-logo">🇬🇧 UK Guide Agency</div>
+    <div class="tb-center">Grammar Series · 4t ESO</div>
+    <div class="tb-right">
+      <div class="tb-slide-name">Introduction</div>
+      <div class="tb-counter"><span>1</span> / 7</div>
+    </div>
+  </div>
+  <div class="slide-content">
+    <div class="intro-body">
+      <div class="intro-badge">📋 Mission 3 — Expert Travel Advice</div>
+      <div class="intro-title">
+        <span class="l1">FIRST CONDITIONAL</span>
+        <span class="l2">SECOND CONDITIONAL</span>
+      </div>
+      <div class="intro-desc">In the <b>UK Guide Agency</b> project you constantly give advice, make predictions and describe hypothetical situations. Conditionals are the key structure for all of this.</div>
+      <div class="intro-chips">
+        <div class="i-chip"><div class="ic-n">🔵 First Conditional</div><div class="ic-d">Real &amp; possible situations</div></div>
+        <div class="i-chip"><div class="ic-n">🟣 Second Conditional</div><div class="ic-d">Hypothetical &amp; imaginary</div></div>
+        <div class="i-chip"><div class="ic-n">6 slides + quiz</div><div class="ic-d">Theory, rules &amp; practice</div></div>
+      </div>
+      <div class="intro-row">
+        <div class="intro-block"><span class="ib-icon">1️⃣</span><div class="ib-text"><b>First Conditional</b> — for real, possible future situations and consequences</div></div>
+        <div class="intro-block"><span class="ib-icon">2️⃣</span><div class="ib-text"><b>Second Conditional</b> — for imaginary, unlikely or impossible situations</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="navbar">
+    <button class="btn-nav" onclick="prev()" disabled>← Back</button>
+    <div class="nav-dots" id="nd1"></div>
+    <button class="btn-nav-primary" onclick="next()">Next →</button>
+  </div>
+</div>
+
+<!-- ══ SLIDE 2 — FIRST CONDITIONAL ══ -->
+<div class="slide" data-slide="2">
+  <div class="topbar">
+    <div class="tb-logo">🇬🇧 UK Guide Agency</div>
+    <div class="tb-center">Grammar Series · 4t ESO</div>
+    <div class="tb-right">
+      <div class="tb-slide-name">First Conditional</div>
+      <div class="tb-counter"><span>2</span> / 7</div>
+    </div>
+  </div>
+  <div class="slide-content">
+    <div class="slide-kicker blue">Real &amp; Possible</div>
+    <div class="slide-title">The <span class="blue">First</span> Conditional</div>
+    <div class="slide-sub">Use for situations that are <b>real and genuinely possible</b> in the present or future.</div>
+    <div class="formula">
+      <span class="kw">IF</span> + subject + <span class="kw">present simple</span> &nbsp;,&nbsp; subject + <span class="kw">will / can / may / might</span> + infinitive
+    </div>
+    <div class="grid4" style="margin-top:.45rem">
+      <div class="card blue">
+        <div class="c-label blue">If-clause first → comma</div>
+        <div class="c-body"><em>If I <b>have</b> time, I <b>will go</b> to the market.</em><br>
+        <em>If you <b>book</b> early, you <b>will save</b> money.</em></div>
+      </div>
+      <div class="card blue">
+        <div class="c-label blue">Result first → no comma</div>
+        <div class="c-body"><em>She <b>will get</b> cold if she <b>doesn't wear</b> a coat.</em><br>
+        <em>You <b>will save</b> money if you <b>book</b> early.</em></div>
+      </div>
+      <div class="card gold">
+        <div class="c-label gold">Other modals in the result</div>
+        <div class="c-body"><em>If we <b>hurry</b>, we <b>can catch</b> the last train.</em> (ability)<br>
+        <em>If it <b>is</b> sunny, we <b>might go</b> to Brighton.</em> (possibility)</div>
+      </div>
+      <div class="card gold">
+        <div class="c-label gold">🇬🇧 UK Guide context</div>
+        <div class="c-body"><em>"If you <b>visit</b> Liverpool, you <b>will see</b> the Albert Dock."</em><br>
+        <em>"If we <b>hurry</b>, we <b>can catch</b> the last Tube."</em></div>
+      </div>
+    </div>
+    <div style="background:var(--err-bg);border:1px solid var(--err-border);border-radius:var(--r);padding:.5rem .9rem;margin-top:.45rem;display:flex;gap:1.2rem;align-items:flex-start">
+      <div style="font-size:.65rem;text-transform:uppercase;letter-spacing:.1em;font-weight:700;color:var(--err);white-space:nowrap;margin-top:.1rem">⚠️ Key Rule</div>
+      <div style="flex:1">
+        <div class="ex-err">❌ "If you <b>will visit</b> London, you will love it."</div>
+        <div class="ex-ok">✅ "If you <b>visit</b> London, you will love it." — Never use <b>will</b> in the if-clause!</div>
+      </div>
+    </div>
+  </div>
+  <div class="navbar">
+    <button class="btn-nav" onclick="prev()">← Back</button>
+    <div class="nav-dots" id="nd2"></div>
+    <button class="btn-nav-primary" onclick="next()">Next →</button>
+  </div>
+</div>
+
+<!-- ══ SLIDE 3 — SECOND CONDITIONAL ══ -->
+<div class="slide" data-slide="3">
+  <div class="topbar">
+    <div class="tb-logo">🇬🇧 UK Guide Agency</div>
+    <div class="tb-center">Grammar Series · 4t ESO</div>
+    <div class="tb-right">
+      <div class="tb-slide-name">Second Conditional</div>
+      <div class="tb-counter"><span>3</span> / 7</div>
+    </div>
+  </div>
+  <div class="slide-content">
+    <div class="slide-kicker purple">Hypothetical &amp; Imaginary</div>
+    <div class="slide-title">The <span class="purple">Second</span> Conditional</div>
+    <div class="slide-sub">Use for situations that are <b>imaginary, unlikely or impossible right now</b>.</div>
+    <div class="formula purple">
+      <span class="kw purple">IF</span> + subject + <span class="kw purple">past simple</span> &nbsp;,&nbsp; subject + <span class="kw purple">would / could / might</span> + infinitive
+    </div>
+    <div class="grid4" style="margin-top:.45rem">
+      <div class="card purple">
+        <div class="c-label purple">If-clause first → comma</div>
+        <div class="c-body"><em>If I <b>won</b> the lottery, I <b>would buy</b> a big house.</em><br>
+        <em>If I <b>lived</b> in London, I <b>would cycle</b> everywhere.</em></div>
+      </div>
+      <div class="card purple">
+        <div class="c-label purple">Result first → no comma</div>
+        <div class="c-body"><em>Grandma <b>would be</b> lonely if I <b>didn't visit</b> her.</em><br>
+        <em>She <b>would eat</b> cake if you <b>made</b> one.</em></div>
+      </div>
+      <div class="card gold">
+        <div class="c-label gold">If I WERE (not was)</div>
+        <div class="c-body">Use <b>were</b> instead of "was" for all persons — especially in formal English.<br>
+        <em>If I <b>were</b> you, I <b>would take</b> the train.</em><br>
+        <em>If she <b>were</b> PM, museums <b>would be</b> free.</em></div>
+      </div>
+      <div class="card gold">
+        <div class="c-label gold">Forming questions</div>
+        <div class="c-body">(Wh-word) + <b>would</b> + subject + inf. + <b>if</b> + subject + past simple<br>
+        <em><b>What would</b> you <b>do</b> if you <b>lost</b> your passport?</em></div>
+      </div>
+    </div>
+    <div style="background:var(--err-bg);border:1px solid var(--err-border);border-radius:var(--r);padding:.5rem .9rem;margin-top:.45rem;display:flex;gap:1.2rem;align-items:flex-start">
+      <div style="font-size:.65rem;text-transform:uppercase;letter-spacing:.1em;font-weight:700;color:var(--err);white-space:nowrap;margin-top:.1rem">⚠️ Key Rule</div>
+      <div style="flex:1">
+        <div class="ex-err">❌ "If I <b>would have</b> more money, I would travel more."</div>
+        <div class="ex-ok">✅ "If I <b>had</b> more money, I would travel more." — Never use <b>would</b> in the if-clause!</div>
+      </div>
+    </div>
+  </div>
+  <div class="navbar">
+    <button class="btn-nav" onclick="prev()">← Back</button>
+    <div class="nav-dots" id="nd3"></div>
+    <button class="btn-nav-primary" onclick="next()">Next →</button>
+  </div>
+</div>
+
+<!-- ══ SLIDE 4 — COMPARISON ══ -->
+<div class="slide" data-slide="4">
+  <div class="topbar">
+    <div class="tb-logo">🇬🇧 UK Guide Agency</div>
+    <div class="tb-center">Grammar Series · 4t ESO</div>
+    <div class="tb-right">
+      <div class="tb-slide-name">First vs Second</div>
+      <div class="tb-counter"><span>4</span> / 7</div>
+    </div>
+  </div>
+  <div class="slide-content">
+    <div class="slide-kicker green">Comparison</div>
+    <div class="slide-title">First <span class="blue">vs</span> Second — The Key Difference</div>
+    <div class="slide-sub">The key is <b>how real or likely the situation is</b> — not just the verb tense.</div>
+    <div class="comp-wrap">
+      <table class="comp-table">
+        <tr>
+          <th></th>
+          <th>🔵 First Conditional</th>
+          <th>🟣 Second Conditional</th>
+        </tr>
+        <tr>
+          <td>Meaning</td>
+          <td class="blue-td">Real and possible — it could happen</td>
+          <td class="purple-td">Hypothetical, unlikely or imaginary</td>
+        </tr>
+        <tr>
+          <td>If-clause</td>
+          <td><span class="tag blue">IF + Present Simple</span></td>
+          <td><span class="tag purple">IF + Past Simple</span></td>
+        </tr>
+        <tr>
+          <td>Result</td>
+          <td><span class="tag blue">will / can / may</span></td>
+          <td><span class="tag purple">would / could / might</span></td>
+        </tr>
+        <tr>
+          <td>Example</td>
+          <td class="blue-td" style="font-style:italic;font-size:.75rem">"If you <b>visit</b> Edinburgh, you <b>will love</b> it." <span style="color:var(--muted);font-style:normal;font-size:.7rem">(realistic)</span></td>
+          <td class="purple-td" style="font-style:italic;font-size:.75rem">"If I <b>were</b> Queen, I <b>would open</b> all palaces for free." <span style="color:var(--muted);font-style:normal;font-size:.7rem">(imaginary)</span></td>
+        </tr>
+        <tr>
+          <td>Comma</td>
+          <td colspan="2" style="color:var(--muted)">Both: comma when if-clause is first. No comma when result is first.</td>
+        </tr>
+      </table>
+      <div class="comp-pair">
+        <div>
+          <div style="font-size:.64rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--blue);margin-bottom:.3rem">🔵 First Conditional errors</div>
+          <div class="ex-err">❌ "If it <b>will rain</b>, we will cancel." — no will in if-clause!</div>
+          <div class="ex-ok">✅ "If it <b>rains</b>, we will cancel."</div>
+        </div>
+        <div>
+          <div style="font-size:.64rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--purple);margin-bottom:.3rem">🟣 Second Conditional errors</div>
+          <div class="ex-err">❌ "If I <b>would have</b> more time, I'd travel more."</div>
+          <div class="ex-ok">✅ "If I <b>had</b> more time, I'd travel more."</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="navbar">
+    <button class="btn-nav" onclick="prev()">← Back</button>
+    <div class="nav-dots" id="nd4"></div>
+    <button class="btn-nav-primary" onclick="next()">Next →</button>
+  </div>
+</div>
+
+<!-- ══ SLIDE 5 — UNLESS & VARIATIONS ══ -->
+<div class="slide" data-slide="5">
+  <div class="topbar">
+    <div class="tb-logo">🇬🇧 UK Guide Agency</div>
+    <div class="tb-center">Grammar Series · 4t ESO</div>
+    <div class="tb-right">
+      <div class="tb-slide-name">Unless &amp; Variations</div>
+      <div class="tb-counter"><span>5</span> / 7</div>
+    </div>
+  </div>
+  <div class="slide-content">
+    <div class="slide-kicker gold">Extra Structures</div>
+    <div class="slide-title">Unless &amp; <span class="gold">Variations</span></div>
+    <div class="slide-sub">Special connectors that add nuance — they work with <b>both</b> First and Second Conditional.</div>
+    <div class="grid3" style="margin-top:.5rem">
+      <div class="card gold">
+        <div class="c-label gold">UNLESS = IF NOT</div>
+        <div class="c-head">Unless</div>
+        <div class="c-body">Means "if not / except if". Verb after <b>unless</b> stays positive — the negative meaning is already included.<br><br>
+        <em>We'll miss the bus <b>unless</b> we <b>hurry</b>.</em><br>
+        <span style="font-size:.71rem;color:var(--muted)">(= if we <b>don't</b> hurry)</span><br>
+        <em><b>Unless</b> you <b>book</b> now, you won't get tickets.</em></div>
+      </div>
+      <div class="card blue">
+        <div class="c-label blue">CONDITION REQUIRED</div>
+        <div class="c-head">As long as / Provided that</div>
+        <div class="c-body">Means "on the condition that" — the condition must be met.<br><br>
+        <em>You can go <b>as long as</b> you're back by midnight.</em><br><br>
+        <em><b>Provided that</b> you have a valid passport, you can enter the UK.</em></div>
+      </div>
+      <div class="card purple">
+        <div class="c-label purple">PRECAUTION</div>
+        <div class="c-head">In case</div>
+        <div class="c-body">Means "because it might happen" — you act <b>before</b> the event as a precaution.<br><br>
+        <em>Take an umbrella <b>in case</b> it rains.</em><br><br>
+        <em>Save the number <b>in case</b> you get lost.</em><br>
+        <span style="font-size:.71rem;color:var(--muted)">⚠️ Different from "if" — in case = before the event</span></div>
+      </div>
+    </div>
+    <div style="background:var(--s2);border:1px solid var(--border);border-radius:var(--r);padding:.55rem .95rem;margin-top:.45rem">
+      <div style="font-size:.64rem;text-transform:uppercase;letter-spacing:.1em;font-weight:700;color:var(--gold);margin-bottom:.35rem">🇬🇧 UK Guide — all three in context</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.4rem">
+        <div class="ex"><em>unless:</em> "Unless you book in advance, you won't get Wimbledon tickets."</div>
+        <div class="ex"><em>in case:</em> "Save the guide's number in case you get separated."</div>
+        <div class="ex"><em>as long as:</em> "You can join the tour as long as you arrive before 9 AM."</div>
+      </div>
+    </div>
+  </div>
+  <div class="navbar">
+    <button class="btn-nav" onclick="prev()">← Back</button>
+    <div class="nav-dots" id="nd5"></div>
+    <button class="btn-nav-primary" onclick="next()">Next →</button>
+  </div>
+</div>
+
+<!-- ══ SLIDE 6 — COMMON ERRORS ══ -->
+<div class="slide" data-slide="6">
+  <div class="topbar">
+    <div class="tb-logo">🇬🇧 UK Guide Agency</div>
+    <div class="tb-center">Grammar Series · 4t ESO</div>
+    <div class="tb-right">
+      <div class="tb-slide-name">Common Errors</div>
+      <div class="tb-counter"><span>6</span> / 7</div>
+    </div>
+  </div>
+  <div class="slide-content">
+    <div class="slide-kicker red">Watch Out!</div>
+    <div class="slide-title">Common <span class="red">Errors</span></div>
+    <div class="slide-sub">These are the most frequent mistakes. Read each pair and understand <b>why</b> the wrong version is wrong.</div>
+    <div class="err-grid">
+      <div class="err-card">
+        <div class="err-num">Error 1</div>
+        <div class="err-rule">WILL in the if-clause (1st Conditional)</div>
+        <div class="ex-err">❌ "If you <b>will visit</b> Edinburgh, you will love it."</div>
+        <div class="ex-ok">✅ "If you <b>visit</b> Edinburgh, you will love it."</div>
+        <div class="err-explain">The if-clause always uses <b>present simple</b>. Never use will in the if-clause.</div>
+      </div>
+      <div class="err-card">
+        <div class="err-num">Error 2</div>
+        <div class="err-rule">WOULD in the if-clause (2nd Conditional)</div>
+        <div class="ex-err">❌ "If I <b>would have</b> more money, I would travel more."</div>
+        <div class="ex-ok">✅ "If I <b>had</b> more money, I would travel more."</div>
+        <div class="err-explain">The if-clause uses <b>past simple</b>. Only the result clause uses <b>would</b>.</div>
+      </div>
+      <div class="err-card">
+        <div class="err-num">Error 3</div>
+        <div class="err-rule">Using 1st when you mean 2nd (reality check)</div>
+        <div class="ex-err">❌ "If I <b>am</b> a millionaire, I will buy a castle." (you are NOT one)</div>
+        <div class="ex-ok">✅ "If I <b>were</b> a millionaire, I would buy a castle."</div>
+        <div class="err-explain">If the situation is <b>imaginary or impossible</b>, use the 2nd Conditional.</div>
+      </div>
+      <div class="err-card">
+        <div class="err-num">Error 4</div>
+        <div class="err-rule">Comma confusion</div>
+        <div class="ex-err">❌ "You will get wet, if you don't take an umbrella."</div>
+        <div class="ex-ok">✅ "If you don't take an umbrella, you will get wet." <span style="color:var(--muted);font-size:.7rem">(comma: if-clause first)</span></div>
+        <div class="ex-ok">✅ "You will get wet if you don't take an umbrella." <span style="color:var(--muted);font-size:.7rem">(no comma: result first)</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="navbar">
+    <button class="btn-nav" onclick="prev()">← Back</button>
+    <div class="nav-dots" id="nd6"></div>
+    <button class="btn-nav-primary" onclick="next()">Next →</button>
+  </div>
+</div>
+
+<!-- ══ SLIDE 7 — QUIZ ══ -->
+<div class="slide" data-slide="7">
+  <div class="topbar">
+    <div class="tb-logo">🇬🇧 UK Guide Agency</div>
+    <div class="tb-center">Grammar Series · 4t ESO</div>
+    <div class="tb-right">
+      <div class="tb-slide-name">Practice Quiz</div>
+      <div class="tb-counter"><span>7</span> / 7</div>
+    </div>
+  </div>
+  <div class="slide-content">
+    <div class="slide-kicker green">Practice — try as many times as you like!</div>
+    <div class="slide-title">Quick <span class="green">Quiz</span></div>
+    <div class="quiz-wrap">
+      <div class="quiz-top">
+        <div class="qprog" id="qprog"></div>
+        <div class="qscore" id="qscore">0 / 8</div>
+      </div>
+      <div id="qcard-wrap"></div>
+      <div class="quiz-result" id="qresult">
+        <div class="qr-icon" id="qr-icon">🏆</div>
+        <div class="qr-title" id="qr-title">Quiz Complete!</div>
+        <div class="qr-score" id="qr-score"></div>
+        <button class="btn-full-retry" onclick="initQuiz()">🔄 Try Again</button>
+      </div>
+    </div>
+  </div>
+  <div class="navbar">
+    <button class="btn-nav" onclick="prev()">← Back</button>
+    <div class="nav-dots" id="nd7"></div>
+    <button class="btn-nav" disabled>— End —</button>
+  </div>
+</div>
+
+</div><!-- /deck -->
+<script>
+// ── SLIDES ──
+const TOTAL=7; let cur=1;
+function goTo(n){
+  document.querySelectorAll('.slide').forEach(s=>{
+    const sn=+s.dataset.slide;
+    s.classList.remove('active','exit-left');
+    if(sn===n) s.classList.add('active');
+    else if(sn<n) s.classList.add('exit-left');
+  });
+  cur=n; dots();
+}
+function next(){if(cur<TOTAL)goTo(cur+1)}
+function prev(){if(cur>1)goTo(cur-1)}
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key==='ArrowDown')next();
+  if(e.key==='ArrowLeft'||e.key==='ArrowUp')prev();
+});
+function dots(){
+  document.querySelectorAll('[id^="nd"]').forEach(c=>{
+    c.innerHTML=Array.from({length:TOTAL},(_,i)=>
+      `<div class="nav-dot ${i+1===cur?'active':''}" onclick="goTo(${i+1})"></div>`
+    ).join('');
+  });
+}
+dots();
+
+// ── QUIZ ──
+const QS=[
+  {q:'If you ___ to Edinburgh, you will see the famous castle.',b:true,
+   opts:['will go','go','went','would go'],ans:1,type:'1st Conditional',
+   fb:'1st Conditional: <b>if + present simple</b>. Never use "will" in the if-clause!'},
+  {q:'If I ___ you, I would take the Eurostar instead of flying.',b:true,
+   opts:['am','was','were','will be'],ans:2,type:'2nd Conditional',
+   fb:'"If I <b>were</b> you" is the standard 2nd Conditional form. Use <b>were</b>, not "was".'},
+  {q:'If we book early, we ___ money on train tickets.',b:true,
+   opts:['save','saved','will save','would save'],ans:2,type:'1st Conditional',
+   fb:'1st Conditional result: <b>will + infinitive</b>. Booking early is real and possible.'},
+  {q:'If she ___ in London, she would cycle everywhere.',b:true,
+   opts:['lives','lived','will live','would live'],ans:1,type:'2nd Conditional',
+   fb:'2nd Conditional: <b>if + past simple</b>. She does <b>not</b> live in London — it\'s hypothetical.'},
+  {q:'Which sentence is CORRECT?',b:false,
+   opts:['If it will rain, we will cancel the tour.','If it rains, we will cancel the tour.','If it rained, we will cancel the tour.','If it would rain, we would cancel.'],
+   ans:1,type:'1st Conditional',
+   fb:'<b>If + present simple → will + infinitive</b>. Never "will" in the if-clause.'},
+  {q:'___ you hurry, you won\'t get a ticket. (= If you don\'t hurry)',b:true,
+   opts:['If','Unless','In case','Provided'],ans:1,type:'Unless',
+   fb:'<b>Unless</b> = "if not". It replaces "if … not". Verb after "unless" stays positive.'},
+  {q:'If I ___ a million pounds, I would rent a castle in Scotland.',b:true,
+   opts:['have','had','will have','would have'],ans:1,type:'2nd Conditional',
+   fb:'2nd Conditional: <b>if + past simple</b> (had). Renting a castle is hypothetical!'},
+  {q:'Take a map ___ you get lost in the Highlands.',b:true,
+   opts:['unless','if','in case','provided that'],ans:2,type:'In case',
+   fb:'<b>In case</b> = you act as a precaution <em>before</em> something might happen.'},
+];
+
+let qi=0,sc=0,answered=[];
+function initQuiz(){
+  qi=0;sc=0;answered=new Array(QS.length).fill(false);
+  document.getElementById('qresult').classList.remove('show');
+  document.getElementById('qcard-wrap').style.display='';
+  render();
+}
+function renderProg(){
+  document.getElementById('qprog').innerHTML=QS.map((_,i)=>
+    `<div class="qpd ${answered[i]?'done':i===qi?'current':''}"></div>`
+  ).join('');
+  document.getElementById('qscore').textContent=sc+' / '+QS.length;
+}
+function render(){
+  renderProg();
+  const q=QS[qi];
+  document.getElementById('qcard-wrap').innerHTML=`
+  <div class="qcard">
+    <div class="qcard-hdr">
+      <span class="qcard-num">Q ${qi+1} / ${QS.length}</span>
+      <span class="tag ${q.type.includes('1st')?'blue':q.type.includes('2nd')?'purple':'gold'}">${q.type}</span>
+    </div>
+    <div class="qcard-body">
+      <div class="qcard-q">${q.b?q.q.replace('___','<span class="blank">___</span>'):q.q}</div>
+      <div class="qopts">
+        ${q.opts.map((o,i)=>`<div class="qopt" id="qo${i}" onclick="choose(${i})"><span class="ql">${'ABCD'[i]}</span><span>${o}</span></div>`).join('')}
+      </div>
+      <div class="qfb" id="qfb"></div>
+      <div class="quiz-nav-btns">
+        <button class="btn-qnext" id="qnxt" onclick="nextQ()">${qi<QS.length-1?'Next →':'See results →'}</button>
+        <button class="btn-retry-q" id="qret" onclick="retryQ()">↩ Try again</button>
+      </div>
+    </div>
+  </div>`;
+}
+function choose(i){
+  const q=QS[qi]; if(answered[qi])return;
+  answered[qi]=true; const ok=i===q.ans; if(ok)sc++;
+  q.opts.forEach((_,j)=>{
+    const el=document.getElementById('qo'+j); if(!el)return;
+    el.classList.add('locked');
+    if(j===q.ans) el.classList.add(ok?'correct':'reveal');
+    if(j===i&&!ok) el.classList.add('wrong');
+  });
+  const fb=document.getElementById('qfb');
+  fb.className='qfb show '+(ok?'good':'bad');
+  fb.innerHTML=(ok?'✅ <b>Correct!</b> ':'❌ <b>Not quite.</b> ')+q.fb;
+  document.getElementById('qnxt').classList.add('show');
+  if(!ok) document.getElementById('qret').classList.add('show');
+  renderProg();
+}
+function nextQ(){qi++;if(qi>=QS.length)showResult();else render();}
+function retryQ(){answered[qi]=false;render();}
+function showResult(){
+  document.getElementById('qcard-wrap').style.display='none';
+  const p=Math.round(sc/QS.length*100);
+  const [icon,title]=p===100?['🏆','Elite Guide!']:p>=75?['⭐','Expert Guide!']:p>=50?['🗺️','Explorer!']:['🎫','Keep Practising!'];
+  document.getElementById('qr-icon').textContent=icon;
+  document.getElementById('qr-title').textContent=title;
+  document.getElementById('qr-score').innerHTML='You scored <b>'+sc+' out of '+QS.length+'</b> ('+p+'%)';
+  document.getElementById('qresult').classList.add('show');
+  renderProg();
+}
+initQuiz();
+</script>
+</body>
+</html>
