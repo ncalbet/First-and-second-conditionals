@@ -139,15 +139,15 @@ body{color:var(--text);font-family:'DM Sans',sans-serif;font-size:15px}
 .c-label.red{color:var(--err)}
 .c-label.ok{color:var(--ok)}
 .c-head{font-family:'Bebas Neue',sans-serif;font-size:1.05rem;letter-spacing:.04em;color:var(--text)}
-.c-body{font-size:.86rem;color:var(--muted);line-height:1.55}
+.c-body{font-size:.93rem;color:var(--muted);line-height:1.55}
 .c-body b{color:var(--text)}
 .c-body em{font-style:italic;color:var(--text);font-weight:500}
 
 /* ── EX BOXES ── */
-.ex{background:#fff;border-left:3px solid var(--gold);border-radius:0 5px 5px 0;padding:.32rem .75rem;font-size:.85rem;color:var(--text);line-height:1.5;margin:.15rem 0}
+.ex{background:#fff;border-left:3px solid var(--gold);border-radius:0 5px 5px 0;padding:.32rem .75rem;font-size:.91rem;color:var(--text);line-height:1.5;margin:.15rem 0}
 .ex em{color:var(--gold);font-style:normal;font-weight:700}
-.ex-err{background:#fff;border-left:3px solid var(--err);border-radius:0 5px 5px 0;padding:.32rem .75rem;font-size:.85rem;color:var(--err);line-height:1.5;margin:.15rem 0}
-.ex-ok{background:#fff;border-left:3px solid var(--ok);border-radius:0 5px 5px 0;padding:.32rem .75rem;font-size:.85rem;color:#15803d;line-height:1.5;margin:.15rem 0}
+.ex-err{background:#fff;border-left:3px solid var(--err);border-radius:0 5px 5px 0;padding:.32rem .75rem;font-size:.91rem;color:var(--err);line-height:1.5;margin:.15rem 0}
+.ex-ok{background:#fff;border-left:3px solid var(--ok);border-radius:0 5px 5px 0;padding:.32rem .75rem;font-size:.91rem;color:#15803d;line-height:1.5;margin:.15rem 0}
 
 /* ── TAG ── */
 .tag{display:inline-block;padding:.1rem .45rem;border-radius:4px;font-size:.68rem;font-weight:700}
@@ -176,13 +176,13 @@ body{color:var(--text);font-family:'DM Sans',sans-serif;font-size:15px}
 
 /* ── COMPARISON TABLE ── */
 .comp-wrap{flex:1;display:flex;flex-direction:column;gap:.5rem}
-.comp-table{width:100%;border-collapse:collapse;font-size:.85rem;background:var(--surface);border-radius:var(--r);overflow:hidden;border:1px solid var(--border)}
-.comp-table th{padding:.45rem .85rem;text-align:left;font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;background:var(--s3);border-bottom:2px solid var(--border)}
+.comp-table{width:100%;border-collapse:collapse;font-size:.91rem;background:var(--surface);border-radius:var(--r);overflow:hidden;border:1px solid var(--border)}
+.comp-table th{padding:.45rem .85rem;text-align:left;font-size:.76rem;text-transform:uppercase;letter-spacing:.08em;background:var(--s3);border-bottom:2px solid var(--border)}
 .comp-table th:nth-child(2){color:var(--blue)}
 .comp-table th:nth-child(3){color:var(--purple)}
 .comp-table td{padding:.42rem .85rem;border-bottom:1px solid var(--border);vertical-align:middle;line-height:1.45}
 .comp-table tr:last-child td{border-bottom:none}
-.comp-table td:first-child{color:var(--muted);font-weight:700;font-size:.72rem;text-transform:uppercase;letter-spacing:.06em;background:var(--s2);white-space:nowrap;width:110px}
+.comp-table td:first-child{color:var(--muted);font-weight:700;font-size:.75rem;text-transform:uppercase;letter-spacing:.06em;background:var(--s2);white-space:nowrap;width:110px}
 .comp-table td.blue-td{color:var(--blue)}
 .comp-table td.purple-td{color:var(--purple)}
 .comp-pair{display:grid;grid-template-columns:1fr 1fr;gap:.5rem}
@@ -194,6 +194,11 @@ body{color:var(--text);font-family:'DM Sans',sans-serif;font-size:15px}
 .err-rule{font-size:.79rem;font-weight:700;color:var(--text);margin-bottom:.1rem}
 .err-explain{font-size:.79rem;color:var(--muted);line-height:1.45;margin-top:.12rem}
 .err-explain b{color:var(--text)}
+.err-reveal{animation:revealIn .25s ease}
+@keyframes revealIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
+.btn-reveal{margin-top:auto;align-self:flex-start;background:var(--s2);border:1px solid var(--border2);border-radius:6px;color:var(--blue);font-size:.75rem;font-weight:700;font-family:'DM Sans',sans-serif;padding:.28rem .75rem;cursor:pointer;transition:all .15s}
+.btn-reveal:hover{background:var(--blue-bg);border-color:var(--blue)}
+.btn-reveal.done{color:var(--ok);border-color:rgba(22,163,74,.3);background:rgba(22,163,74,.07);cursor:default}
 
 /* ── QUIZ ── */
 .quiz-wrap{flex:1;display:flex;flex-direction:column;gap:.55rem;max-width:640px}
@@ -315,8 +320,14 @@ body{color:var(--text);font-family:'DM Sans',sans-serif;font-size:15px}
       </div>
       <div class="card gold">
         <div class="c-label gold">🇬🇧 UK Guide context</div>
-        <div class="c-body"><em>"If you <b>visit</b> Liverpool, you <b>will see</b> the Albert Dock."</em><br>
-        <em>"If we <b>hurry</b>, we <b>can catch</b> the last Tube."</em></div>
+        <div class="c-body">
+        <span style="font-size:.68rem;color:var(--gold);font-weight:700;text-transform:uppercase;letter-spacing:.07em">If-clause first:</span><br>
+        <em>"If you <b>visit</b> Liverpool, you <b>will see</b> the Albert Dock."</em><br>
+        <em>"If we <b>hurry</b>, we <b>can catch</b> the last Tube."</em><br>
+        <span style="font-size:.68rem;color:var(--gold);font-weight:700;text-transform:uppercase;letter-spacing:.07em">Result first:</span><br>
+        <em>"You <b>will love</b> Edinburgh if you <b>visit</b> in autumn."</em><br>
+        <em>"Ms. Taylor <b>won't get</b> a ticket if she <b>doesn't book</b> ahead."</em>
+        </div>
       </div>
     </div>
     <div style="background:var(--err-bg);border:1px solid var(--err-border);border-radius:var(--r);padding:.5rem .9rem;margin-top:.45rem;display:flex;gap:1.2rem;align-items:flex-start">
@@ -427,8 +438,8 @@ body{color:var(--text);font-family:'DM Sans',sans-serif;font-size:15px}
         </tr>
         <tr>
           <td>Example</td>
-          <td class="blue-td" style="font-style:italic;font-size:.75rem">"If you <b>visit</b> Edinburgh, you <b>will love</b> it." <span style="color:var(--muted);font-style:normal;font-size:.7rem">(realistic)</span></td>
-          <td class="purple-td" style="font-style:italic;font-size:.75rem">"If I <b>were</b> Queen, I <b>would open</b> all palaces for free." <span style="color:var(--muted);font-style:normal;font-size:.7rem">(imaginary)</span></td>
+          <td class="blue-td" style="font-style:italic;font-size:.88rem">"If you <b>visit</b> Edinburgh, you <b>will love</b> it." <span style="color:var(--muted);font-style:normal;font-size:.78rem">(realistic)</span></td>
+          <td class="purple-td" style="font-style:italic;font-size:.88rem">"If I <b>were</b> Queen, I <b>would open</b> all palaces for free." <span style="color:var(--muted);font-style:normal;font-size:.78rem">(imaginary)</span></td>
         </tr>
         <tr>
           <td>Comma</td>
@@ -437,12 +448,12 @@ body{color:var(--text);font-family:'DM Sans',sans-serif;font-size:15px}
       </table>
       <div class="comp-pair">
         <div>
-          <div style="font-size:.64rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--blue);margin-bottom:.3rem">🔵 First Conditional errors</div>
+          <div style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--blue);margin-bottom:.3rem">🔵 First Conditional errors</div>
           <div class="ex-err">❌ "If it <b>will rain</b>, we will cancel." — no will in if-clause!</div>
           <div class="ex-ok">✅ "If it <b>rains</b>, we will cancel."</div>
         </div>
         <div>
-          <div style="font-size:.64rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--purple);margin-bottom:.3rem">🟣 Second Conditional errors</div>
+          <div style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--purple);margin-bottom:.3rem">🟣 Second Conditional errors</div>
           <div class="ex-err">❌ "If I <b>would have</b> more time, I'd travel more."</div>
           <div class="ex-ok">✅ "If I <b>had</b> more time, I'd travel more."</div>
         </div>
@@ -530,29 +541,41 @@ body{color:var(--text);font-family:'DM Sans',sans-serif;font-size:15px}
         <div class="err-num">Error 1</div>
         <div class="err-rule">WILL in the if-clause (1st Conditional)</div>
         <div class="ex-err">❌ "If you <b>will visit</b> Edinburgh, you will love it."</div>
-        <div class="ex-ok">✅ "If you <b>visit</b> Edinburgh, you will love it."</div>
-        <div class="err-explain">The if-clause always uses <b>present simple</b>. Never use will in the if-clause.</div>
+        <div class="err-reveal" id="rev1" style="display:none">
+          <div class="ex-ok">✅ "If you <b>visit</b> Edinburgh, you will love it."</div>
+          <div class="err-explain">The if-clause always uses <b>present simple</b>. Never use will in the if-clause.</div>
+        </div>
+        <button class="btn-reveal" onclick="reveal('rev1',this)">Show correction ▾</button>
       </div>
       <div class="err-card">
         <div class="err-num">Error 2</div>
         <div class="err-rule">WOULD in the if-clause (2nd Conditional)</div>
         <div class="ex-err">❌ "If I <b>would have</b> more money, I would travel more."</div>
-        <div class="ex-ok">✅ "If I <b>had</b> more money, I would travel more."</div>
-        <div class="err-explain">The if-clause uses <b>past simple</b>. Only the result clause uses <b>would</b>.</div>
+        <div class="err-reveal" id="rev2" style="display:none">
+          <div class="ex-ok">✅ "If I <b>had</b> more money, I would travel more."</div>
+          <div class="err-explain">The if-clause uses <b>past simple</b>. Only the result clause uses <b>would</b>.</div>
+        </div>
+        <button class="btn-reveal" onclick="reveal('rev2',this)">Show correction ▾</button>
       </div>
       <div class="err-card">
         <div class="err-num">Error 3</div>
         <div class="err-rule">Using 1st when you mean 2nd (reality check)</div>
         <div class="ex-err">❌ "If I <b>am</b> a millionaire, I will buy a castle." (you are NOT one)</div>
-        <div class="ex-ok">✅ "If I <b>were</b> a millionaire, I would buy a castle."</div>
-        <div class="err-explain">If the situation is <b>imaginary or impossible</b>, use the 2nd Conditional.</div>
+        <div class="err-reveal" id="rev3" style="display:none">
+          <div class="ex-ok">✅ "If I <b>were</b> a millionaire, I would buy a castle."</div>
+          <div class="err-explain">If the situation is <b>imaginary or impossible</b>, use the 2nd Conditional.</div>
+        </div>
+        <button class="btn-reveal" onclick="reveal('rev3',this)">Show correction ▾</button>
       </div>
       <div class="err-card">
         <div class="err-num">Error 4</div>
         <div class="err-rule">Comma confusion</div>
         <div class="ex-err">❌ "You will get wet, if you don't take an umbrella."</div>
-        <div class="ex-ok">✅ "If you don't take an umbrella, you will get wet." <span style="color:var(--muted);font-size:.7rem">(comma: if-clause first)</span></div>
-        <div class="ex-ok">✅ "You will get wet if you don't take an umbrella." <span style="color:var(--muted);font-size:.7rem">(no comma: result first)</span></div>
+        <div class="err-reveal" id="rev4" style="display:none">
+          <div class="ex-ok">✅ "If you don't take an umbrella, you will get wet." <span style="color:var(--muted);font-size:.78rem">(comma: if-clause first)</span></div>
+          <div class="ex-ok">✅ "You will get wet if you don't take an umbrella." <span style="color:var(--muted);font-size:.78rem">(no comma: result first)</span></div>
+        </div>
+        <button class="btn-reveal" onclick="reveal('rev4',this)">Show correction ▾</button>
       </div>
     </div>
   </div>
@@ -609,6 +632,18 @@ function goTo(n){
     else if(sn<n) s.classList.add('exit-left');
   });
   cur=n; dots();
+  // Reset error reveals when going back to slide 6
+  if(n===6){
+    ['rev1','rev2','rev3','rev4'].forEach(id=>{
+      const el=document.getElementById(id);
+      if(el) el.style.display='none';
+    });
+    document.querySelectorAll('.btn-reveal').forEach(btn=>{
+      btn.textContent='Show correction ▾';
+      btn.classList.remove('done');
+      btn.disabled=false;
+    });
+  }
 }
 function next(){if(cur<TOTAL)goTo(cur+1)}
 function prev(){if(cur>1)goTo(cur-1)}
@@ -718,6 +753,15 @@ function showResult(){
   renderProg();
 }
 initQuiz();
+
+function reveal(id, btn){
+  const el=document.getElementById(id);
+  if(!el)return;
+  el.style.display='block';
+  btn.textContent='✓ Correction shown';
+  btn.classList.add('done');
+  btn.disabled=true;
+}
 </script>
 </body>
 </html>
